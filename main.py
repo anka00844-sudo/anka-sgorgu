@@ -172,7 +172,6 @@ async def receipt_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except Exception as e:
         logging.error(f"Dekont hatası: {e}")
 
-# Render port uyarılarını çözmek için hafif bir web sunucusu
 async def handle_web(request):
     return web.Response(text="ANKA Bot Aktif Çalışıyor!")
 
@@ -187,7 +186,6 @@ async def start_web_server():
     logging.info(f"Web sunucusu {port} portunda başlatıldı.")
 
 async def main():
-    # Render port hatasını gidermek için web sunucusunu arka planda başlatıyoruz
     await start_web_server()
 
     app = Application.builder().token(BOT_TOKEN).build()
@@ -195,11 +193,11 @@ async def main():
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CallbackQueryHandler(button_handler))
     app.add_handler(MessageHandler(filters.PHOTO | filters.Document.ALL, receipt_handler))
-app.add_handler(MessageHandler(filters.CHAT & filters.TEXT & ~filters.COMMAND, handle_query_input))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_query_input))
+    
     print("ANKA Bot Sorunsuz Başlatıldı!")
     await app.initialize()
     await app.start()
-    # drop_pending_updates=True sayesinde arkada kalan eski istekler temizlenir ve çakışma (Conflict) önlenir.
     await app.updater.start_polling(drop_pending_updates=True)
     
     stop_event = asyncio.Event()
