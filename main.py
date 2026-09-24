@@ -195,8 +195,7 @@ async def main():
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CallbackQueryHandler(button_handler))
     app.add_handler(MessageHandler(filters.PHOTO | filters.Document.ALL, receipt_handler))
-    app.add_handler(MessageHandler(filters.CHAT & filters.TEXT & ~filters.COMMAND, handle_query_input))
-    
+app.add_handler(MessageHandler(filters.CHAT & filters.TEXT & ~filters.COMMAND, handle_query_input))
     print("ANKA Bot Sorunsuz Başlatıldı!")
     await app.initialize()
     await app.start()
